@@ -7,6 +7,7 @@ package Tests;
 
 import Framework.Driver;
 import Framework.Pages.SkiUtahHomePage;
+import Framework.Pages.HomePageMenuItem;
 import junit.framework.Assert;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -19,9 +20,9 @@ import static org.junit.Assert.*;
  *
  * @author Dan
  */
-public class NavigateToSite {
+public class NavigateToMenuItem {
     
-    public NavigateToSite() {
+    public NavigateToMenuItem() {
     }
     
     @BeforeClass
@@ -44,12 +45,12 @@ public class NavigateToSite {
     @After
     public void tearDown() {
     }
-
-    @Test
-    public void testPageTitleExists() 
-    {
-        String titleText = Driver.homePage.getPageTitle();
-        Assert.assertEquals("Ski Utah - Ski Utah", titleText);
-    }
     
+    @Test
+    public void navigateToPlanPage()
+    {
+        Driver.homePage.setSelectedMenuItem("PLAN YOUR TRIP");
+        Driver.homePage.navigateToSelectedMenuItem();
+        Assert.assertEquals("Ski Utah Trip Planner - Ski Utah", Driver.getCurrentPageTitle());
+    }
 }
