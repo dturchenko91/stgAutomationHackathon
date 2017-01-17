@@ -40,17 +40,38 @@ public class NavigateToMenuItem {
     
     @Before
     public void setUp() {
+        if (!Driver.getCurrentPageTitle().equals("Ski Utah - Ski Utah"));
+            Driver.navigateToHomePage();
     }
     
     @After
     public void tearDown() {
     }
     
+    //automation challenge 2
     @Test
     public void navigateToPlanPage()
     {
-        Driver.homePage.setSelectedMenuItem("PLAN YOUR TRIP");
+        String selectedMenuItem = "PLAN YOUR TRIP ";
+        Assert.assertTrue("Nav Menu Element " + selectedMenuItem + " not found.", Driver.homePage.setSelectedMenuItem(selectedMenuItem));
         Driver.homePage.navigateToSelectedMenuItem();
         Assert.assertEquals("Ski Utah Trip Planner - Ski Utah", Driver.getCurrentPageTitle());
+        
+        
+    }
+    
+    //automation challenge 3
+    //this uses some exploits to pass as i'm having trouble writing a mouseover function. instead i must make do with a
+    //slightly hacky solution to reach the resorts comparison page by clicking on the top nav element instead of simply hovering over it
+    @Test
+    public void navigateToResortComparisonPage()
+    {
+        String selectedMenuItem = "RESORTS & SNOW ";
+        String selectedSubMenuItem = "Resort Comparison";
+        Assert.assertTrue("Nav Menu Element " + selectedMenuItem + " not found.", Driver.homePage.setSelectedMenuItem(selectedMenuItem));
+        Assert.assertTrue("Nav Menu SubElement " + selectedSubMenuItem + " not found", Driver.homePage.setSelectedSubMenuItem(selectedSubMenuItem));
+        
+        Driver.homePage.navigateToSelectedSubMenuItem();
+        Assert.assertEquals("Resort Comparison - Ski Utah", Driver.getCurrentPageTitle());
     }
 }

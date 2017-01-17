@@ -43,6 +43,8 @@ public final class Driver {
         
         driver.get("http://www.skiutah.com");
         
+        driver.manage().window().maximize();
+        
         homePage = new SkiUtahHomePage();
     }
     
@@ -68,15 +70,22 @@ public final class Driver {
     }
     
     //code to allow a more advanced click, accessible from any page object method
+    //temporarily using a double click instead of a hover as advertised as hover seems to be broken
     public static void hoverThenClick(WebElement element)
     {
         Actions action = new Actions(driver);
         
-        action.moveToElement(element).build().perform();
+        action.click(element).click(element).build().perform();
+    }
+    
+    //temporary to allow passing of NavigateToResortComparisonPage. No other way to open the context menu besides clicking as hover seems to be broken
+    public static void hoverThenClickSubElement(WebElement element, WebElement element2)
+    {
+        //implicitWait(500);
         
-        implicitWait(500);
+        Actions action = new Actions(driver);
         
-        action.click(element).build().perform();
+        action.click(element).moveToElement(element2).click(element2).build().perform();
     }
     
 }
