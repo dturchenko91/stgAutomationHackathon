@@ -8,12 +8,17 @@
 package Framework;
 
 import Framework.Pages.SkiUtahHomePage;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.NoSuchElementException;
 /**
  *
  * @author Dan
@@ -62,12 +67,43 @@ public final class Driver {
     //try-catch-wrapped wait method
     public static void implicitWait(long length)
     {
+        
         try {
             Thread.sleep(length);
         } catch (InterruptedException ex) {
             Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        /*
+        WebDriverWait wait = new WebDriverWait(driver, length);
+        try {
+            wait.wait();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Driver.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        */
     }
+    
+    public static void explicitWaitUntilNotVisible(String cssSelector)
+    {
+        WebDriverWait wait = new WebDriverWait(driver, 15);
+        
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(cssSelector)));
+    }
+    
+    /*
+    public static Boolean elementIsVisible(WebElement element)
+    {
+        try
+        {
+            return (element.isDisplayed());
+        }
+        catch (NoSuchElementException e)
+        {
+            return false;
+        }        
+    }
+*/
     
     //code to allow a more advanced click, accessible from any page object method
     //temporarily using a double click instead of a hover as advertised as hover seems to be broken

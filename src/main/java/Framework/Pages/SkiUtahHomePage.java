@@ -26,14 +26,18 @@ public class SkiUtahHomePage {
     
     private HomePageMenuItem selectedMenuItem;
     
+    private WebElement staticText;
+    
     public String getPageTitle()
     {
-        return driver.getTitle();
+        return driver.getTitle(); 
     }
     
     public SkiUtahHomePage()
     {
         menu = getMenu();
+        
+        staticText = driver.findElement(By.cssSelector("p.map-Footer-copy"));
     }
     
     //create list of menu objects from list of webElements
@@ -51,6 +55,11 @@ public class SkiUtahHomePage {
         return menu;
     }
     
+    public void getSubMenu()
+    {
+        selectedMenuItem.getSubMenu();
+    }
+    
     //Sets selectedMenuItem to specified menu item for easier access
     //Returns true if matching menu item is found
     //Returns false if not found so test fails
@@ -58,11 +67,12 @@ public class SkiUtahHomePage {
     {
         for (int i = 0; i < menu.size(); i ++)
         {
-            //debug string
-            String current = menu.get(i).returnText();
             if (menu.get(i).returnText().equals(menuItemText))
             {
                 selectedMenuItem = menu.get(i);
+                
+                getSubMenu();
+                
                 return true;
             }            
         }
@@ -96,14 +106,24 @@ public class SkiUtahHomePage {
     {
         selectedMenuItem.ClickElement();
         
-        Driver.implicitWait(1000);
+        Driver.implicitWait(500);
     }
     
     public void navigateToSelectedSubMenuItem()
     {
         selectedMenuItem.ClickSelectedSubElement();
         
-        Driver.implicitWait(1000);
+        Driver.implicitWait(500);
+    }
+    
+    //method to click a static text link on the page to clear away any modals or context menus that may have appeared. includes a wait
+    public void clickStaticText()
+    {    
+        
+        staticText.click();
+        
+        Driver.implicitWait(2500);
+        
     }
     
 }

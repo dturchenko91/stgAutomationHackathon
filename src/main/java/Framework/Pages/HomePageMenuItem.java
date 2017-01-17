@@ -33,8 +33,6 @@ public class HomePageMenuItem {
     public HomePageMenuItem(WebElement element)
     {
         this.element = element;
-        
-        subMenu = getSubMenu();
     }
     
     //some menu elements have a hover menu. A regular click() does not work, special code is required to first hover over, then click the element
@@ -59,32 +57,41 @@ public class HomePageMenuItem {
     //unfortunately, i cannot get the hover action to stay over the nav element long enough for the 
     //sublink elements to be "visible"
     //therefore I had no choice but to let each nav menu element have all sublink elements of all nav menu elements in its list of sublink elements
-    private List<HomePageMenuHoverItem> getSubMenu()
+    public void getSubMenu()
     {   
         hoverElement();
         
         List<WebElement> elements = driver.findElements(By.cssSelector("a.SuperfishMegaMenu-subLink"));
         
-        List<HomePageMenuHoverItem> contextMenu = new ArrayList<HomePageMenuHoverItem>();
+        subMenu = new ArrayList<HomePageMenuHoverItem>();
         
         for (int i = 0; i < elements.size(); i ++)
         {
-            //if (elements.get(i).isDisplayed())
-                contextMenu.add(new HomePageMenuHoverItem(elements.get(i)));
+            if (elements.get(i).isDisplayed())
+                subMenu.add(new HomePageMenuHoverItem(elements.get(i)));
         }
         
-        return contextMenu;
+        //clicks static text to close hover menu
+        Driver.homePage.clickStaticText();
+        
+        Driver.explicitWaitUntilNotVisible("a.SuperfishMegaMenu-subLink");
+        
+        return;
     }
     
+    //currently, clicking once has the same effect of hovering
     private void hoverElement()
     {
         Actions action = new Actions(driver);
         
-        action.moveToElement(element).build().perform();
+        action.click(element).build().perform();
     }
+    
+    
     
     public Boolean setSelectedSubMenuElement(String selected)
     {
+        //hoverElement actually clicks the element but it has the same effect as hovering over
         hoverElement();
         
         for (int i = 0; i < subMenu.size(); i ++)
@@ -97,6 +104,14 @@ public class HomePageMenuItem {
             if (subMenu.get(i).returnText().equals(selected))
             {
                 selectedSubMenuItem = subMenu.get(i);
+                
+                //this must be clicked to remove the hover menu, otherwise the next click to it will send the user to an unintended page
+                Driver.homePage.clickStaticText();
+                
+                //this is the intended method to ensure that the driver waits until the submenu elements are not visible
+                //currently it doesn't work. the wait does not happen and the link is pressed before it can be cleared away the first time
+                //Driver.explicitWaitUntilNotVisible("a.SuperfishMegaMenu-subLink");
+                
                 return true;
             }
         }
