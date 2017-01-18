@@ -8,6 +8,7 @@
 package Framework;
 
 import Framework.Pages.SkiUtahHomePage;
+import Framework.Pages.ResortComparisonPage;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +29,8 @@ public final class Driver {
     private static WebDriver driver;
     
     public static SkiUtahHomePage homePage;
+    
+    public static ResortComparisonPage resortComparisonPage;
            
     //initializes new chromedriver
     public static void setUp()
@@ -51,6 +54,35 @@ public final class Driver {
         driver.manage().window().maximize();
         
         homePage = new SkiUtahHomePage();
+    }
+    
+    public static Boolean currentPageIsHomePage()
+    {
+        if (getCurrentPageTitle().equals("Ski Utah - Ski Utah"))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    public static void navigateToResortComparisonPage()
+    {
+        if (!currentPageIsHomePage())
+        {
+            navigateToHomePage();
+        }
+        
+        String selectedMenuItem = "RESORTS & SNOW ";
+        String selectedSubMenuItem = "Resort Comparison";
+        homePage.setSelectedMenuItem(selectedMenuItem);
+        homePage.setSelectedSubMenuItem(selectedSubMenuItem);
+        
+        homePage.navigateToSelectedSubMenuItem();
+        
+        resortComparisonPage = new ResortComparisonPage();
     }
     
     public static void tearDown()

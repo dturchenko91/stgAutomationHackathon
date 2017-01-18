@@ -74,4 +74,18 @@ public class NavigateToMenuItem {
         Driver.homePage.navigateToSelectedSubMenuItem();
         Assert.assertEquals("Resort Comparison - Ski Utah", Driver.getCurrentPageTitle());
     }
+    
+    @Test
+    public void getDistanceFromAirport()
+    {
+        Driver.navigateToResortComparisonPage();
+        
+        //todo:
+        
+        String dropDownOptionText = "Miles to Closest Major Airport";
+        Assert.assertTrue("Drop Down option " + dropDownOptionText + " not found.", Driver.resortComparisonPage.selectDropDownOption(dropDownOptionText));
+                
+        //read each individual resort's name and mileage, output to console
+        Driver.resortComparisonPage.readComparisonToConsole();
+    }
 }
